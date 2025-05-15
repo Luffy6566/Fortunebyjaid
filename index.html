@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ดูดวงกับ JAi-D</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #A0DFF7;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      color: #333;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5em;
+      border: 1px solid #E0E0E0;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #A0DFF7;
+      color: #333;
+      padding: 1em;
+      border: none;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 1em;
+      margin-top: 2em;
+      cursor: pointer;
+    }
+    .privacy {
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+      margin-top: 1em;
+    }
+    .result {
+      margin-top: 2em;
+      background: #f9f9f9;
+      padding: 1.5em;
+      border-left: 4px solid #A0DFF7;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .result h2 {
+      margin-bottom: 0.5em;
+    }
+    .result p {
+      margin: 0.5em 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔮 ดูดวงกับ JAi-D</h1>
+
+    <form id="fortune-form">
+      <label>ชื่อ - นามสกุล
+        <input type="text" name="fullname" required />
+      </label>
+
+      <label>ชื่อเล่น (ไม่บังคับ)
+        <input type="text" name="nickname" />
+      </label>
+
+      <label>เบอร์โทรศัพท์
+        <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="เช่น 0812345678" required />
+      </label>
+
+      <label>วันเดือนปีเกิด (พ.ศ.)
+        <input type="text" name="dob" placeholder="เช่น 10/10/2530" required />
+      </label>
+
+      <label>เพศ
+        <select name="gender">
+          <option value="">ไม่ระบุ</option>
+          <option>ชาย</option>
+          <option>หญิง</option>
+          <option>อื่น ๆ</option>
+        </select>
+      </label>
+
+      <button type="submit">ทำนายดวงชะตา</button>
+
+      <p class="privacy">🛡️ หมายเหตุ: ข้อมูลที่คุณกรอกจะไม่ถูกบันทึก ระบบไม่จัดเก็บข้อมูลใด ๆ เพื่อความเป็นส่วนตัวของคุณ 💙</p>
+    </form>
+
+    <div class="result" id="result" style="display:none">
+      <h2>🔮 ผลการทำนายของคุณ</h2>
+      <p id="fortune-text"></p>
+      <p id="fortune-details"></p>
+      <p id="lucky-number"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('fortune-form');
+      const result = document.getElementById('result');
+      const luckyDisplay = document.getElementById('lucky-number');
+      const fortuneText = document.getElementById('fortune-text');
+      const fortuneDetails = document.getElementById('fortune-details');
+
+      const generalFortune = [
+        "วันนี้เป็นวันที่ดีในการเริ่มต้นสิ่งใหม่ ๆ",
+        "มีพลังงานบวกแผ่ซ่านรอบตัวคุณ",
+        "จงใช้สัญชาตญาณนำทางในวันนี้",
+        "โอกาสบางอย่างอาจมาแบบไม่ทันตั้งตัว",
+        "คุณจะได้รับคำชมจากผู้อื่นโดยไม่คาดคิด"
+      ];
+
+      const details = [
+        "💘 ความรัก: มีโอกาสพบเจอคนที่ทำให้หัวใจพองโต หรือได้รับความเอาใจใส่จากคนรัก",
+        "💼 การงาน: มีความก้าวหน้าเล็ก ๆ หรือแนวทางใหม่ ๆ ที่จะทำให้คุณเติบโต",
+        "💰 การเงิน: รายจ่ายอาจมีมากหน่อย แต่จะมีรายได้เสริมเข้ามาทดแทน",
+        "💪 สุขภาพ: ร่างกายสดชื่นขึ้น ถ้าได้พักผ่อนเพียงพอ",
+        "🍀 โชคลาภ: มีลางสังหรณ์หรือเหตุบังเอิญที่นำพาความโชคดีมา"
+      ];
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const randomGeneral = generalFortune[Math.floor(Math.random() * generalFortune.length)];
+        const luckyNums = Array.from({length: 3}, () => Math.floor(Math.random() * 90 + 10));
+
+        fortuneText.textContent = randomGeneral;
+        fortuneDetails.innerHTML = details.map(line => `<div>${line}</div>`).join('');
+        luckyDisplay.textContent = `🎲 เลขเด็ดของคุณคือ: ${luckyNums.join(', ')}`;
+
+        result.style.display = 'block';
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
